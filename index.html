@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NutriCraft — Healthy Recipes</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,500;0,700;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f0e;
+  --bg2: #141816;
+  --bg3: #1c211e;
+  --bg4: #252b27;
+  --card: #1a1f1c;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.14);
+  --text: #f0f2f0;
+  --text2: #9aaa9e;
+  --text3: #6a7a6e;
+  --accent: #5cdf8a;
+  --accent2: #3bb368;
+  --accent3: #1a6b3c;
+  --orange: #f7945a;
+  --purple: #b088f5;
+  --blue: #5ab4f7;
+  --yellow: #f5d05a;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+[data-theme="light"] {
+  --bg: #f4f6f2;
+  --bg2: #ffffff;
+  --bg3: #edf0ea;
+  --bg4: #e2e8dd;
+  --card: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #1a2018;
+  --text2: #4a5e50;
+  --text3: #7a8e80;
+  --accent: #1e8c4a;
+  --accent2: #27aa5a;
+  --accent3: #d4f5e2;
+  --shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background 0.3s,color 0.3s}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.nav-inner{max-width:1280px;margin:0 auto;padding:0 20px;height:64px;display:flex;align-items:center;gap:16px}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--accent);letter-spacing:-0.5px;white-space:nowrap;flex-shrink:0}
+.logo span{color:var(--text);font-weight:300}
+.search-wrap{flex:1;max-width:440px;position:relative}
+.search-wrap input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:10px 20px 10px 44px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border 0.2s,background 0.2s}
+.search-wrap input::placeholder{color:var(--text3)}
+.search-wrap input:focus{border-color:var(--accent);background:var(--bg2)}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+.nav-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:8px 14px;border-radius:50px;font-size:13px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all 0.2s;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-btn.active{background:var(--accent);color:#0d1f14;border-color:var(--accent);font-weight:500}
+.theme-btn{background:none;border:1px solid var(--border);color:var(--text2);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;transition:all 0.2s;flex-shrink:0}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* HERO */
+.hero{max-width:1280px;margin:0 auto;padding:60px 20px 40px;text-align:center}
+.hero-tag{display:inline-block;background:var(--bg3);border:1px solid var(--border);color:var(--accent);font-size:12px;font-weight:500;padding:6px 16px;border-radius:50px;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(36px,6vw,72px);font-weight:700;line-height:1.1;letter-spacing:-2px;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--accent)}
+.hero p{font-size:16px;color:var(--text2);max-width:520px;margin:0 auto 32px;line-height:1.7}
+.stats{display:flex;justify-content:center;gap:40px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat strong{display:block;font-family:'Fraunces',serif;font-size:28px;color:var(--accent);font-weight:700}
+.stat span{font-size:13px;color:var(--text3)}
+
+/* CATEGORIES */
+.section{max-width:1280px;margin:0 auto;padding:40px 20px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.section-title{font-family:'Fraunces',serif;font-size:26px;font-weight:500}
+.see-all{font-size:13px;color:var(--accent);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif}
+.cats{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:10px 20px;border-radius:50px;font-size:14px;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:8px}
+.cat-btn:hover,.cat-btn.active{background:var(--accent);color:#0d1f14;border-color:var(--accent);font-weight:500}
+.cat-icon{font-size:16px}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;position:relative}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--border2)}
+.card-img{width:100%;height:200px;object-fit:cover;display:block;background:var(--bg3)}
+.card-img-wrap{position:relative;overflow:hidden}
+.card-img-wrap img{width:100%;height:200px;object-fit:cover;display:block;transition:transform 0.3s}
+.card:hover .card-img-wrap img{transform:scale(1.04)}
+.fav-btn{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.5);border:none;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all 0.2s;backdrop-filter:blur(4px)}
+.fav-btn:hover{background:rgba(0,0,0,0.7);transform:scale(1.1)}
+.fav-btn.faved{background:rgba(220,60,60,0.8)}
+.cat-badge{position:absolute;top:12px;left:12px;background:rgba(0,0,0,0.6);color:#fff;font-size:11px;font-weight:500;padding:4px 10px;border-radius:50px;backdrop-filter:blur(4px);letter-spacing:0.3px}
+.card-body{padding:16px}
+.meal-name{font-family:'Fraunces',serif;font-size:18px;font-weight:500;margin-bottom:8px;line-height:1.3}
+.meal-meta{display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.meta-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--text3)}
+.meta-item svg{flex-shrink:0}
+.cal-tag{display:inline-flex;align-items:center;gap:5px;background:var(--bg3);border:1px solid var(--border);color:var(--accent);font-size:12px;font-weight:500;padding:4px 10px;border-radius:50px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.tag{font-size:11px;padding:3px 10px;border-radius:50px;font-weight:500}
+.tag-p{background:rgba(92,223,138,0.12);color:var(--accent);border:1px solid rgba(92,223,138,0.2)}
+.tag-c{background:rgba(247,148,90,0.12);color:var(--orange);border:1px solid rgba(247,148,90,0.2)}
+.tag-v{background:rgba(176,136,245,0.12);color:var(--purple);border:1px solid rgba(176,136,245,0.2)}
+.tag-b{background:rgba(90,180,247,0.12);color:var(--blue);border:1px solid rgba(90,180,247,0.2)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:20px;width:100%;max-width:700px;max-height:88vh;overflow-y:auto;position:relative}
+.modal::-webkit-scrollbar{width:4px}
+.modal::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px}
+.modal-img{width:100%;height:280px;object-fit:cover;border-radius:20px 20px 0 0}
+.modal-body{padding:28px}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(0,0,0,0.6);border:none;color:#fff;width:38px;height:38px;border-radius:50%;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-title{font-family:'Fraunces',serif;font-size:28px;font-weight:700;margin-bottom:8px}
+.modal-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0;background:var(--bg3);border-radius:var(--radius);padding:16px}
+.mstat{text-align:center}
+.mstat strong{display:block;font-size:20px;font-weight:700;color:var(--accent)}
+.mstat span{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.5px}
+.modal h3{font-family:'Fraunces',serif;font-size:17px;font-weight:500;margin:20px 0 10px;color:var(--text)}
+.ingredient-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ingredient-list li{font-size:14px;color:var(--text2);padding:6px 10px;background:var(--bg3);border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px}
+.ingredient-list li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.steps{list-style:none;display:flex;flex-direction:column;gap:10px}
+.steps li{font-size:14px;color:var(--text2);padding:12px 14px;background:var(--bg3);border-radius:var(--radius-sm);display:flex;gap:12px;align-items:flex-start;line-height:1.5}
+.step-num{background:var(--accent);color:#0d1f14;min-width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
+
+/* SUBSCRIPTION */
+.sub-section{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:60px 20px;margin:20px 0}
+.sub-inner{max-width:900px;margin:0 auto;text-align:center}
+.sub-inner h2{font-family:'Fraunces',serif;font-size:clamp(28px,4vw,44px);font-weight:700;margin-bottom:12px;letter-spacing:-1px}
+.sub-inner p{color:var(--text2);margin-bottom:40px;font-size:15px}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.plan{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:24px;text-align:left;transition:border-color 0.2s,transform 0.2s;position:relative}
+.plan:hover{border-color:var(--accent);transform:translateY(-2px)}
+.plan.featured{border-color:var(--accent);background:linear-gradient(135deg,rgba(92,223,138,0.08),var(--bg3))}
+.plan-popular{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#0d1f14;font-size:11px;font-weight:700;padding:4px 14px;border-radius:50px;white-space:nowrap;letter-spacing:0.5px}
+.plan h3{font-family:'Fraunces',serif;font-size:20px;margin-bottom:4px}
+.plan-price{font-size:32px;font-weight:700;color:var(--accent);font-family:'Fraunces',serif;margin:12px 0 4px}
+.plan-price sup{font-size:16px;vertical-align:super}
+.plan-price span{font-size:14px;color:var(--text3);font-weight:400;font-family:'DM Sans',sans-serif}
+.plan-features{list-style:none;margin:16px 0;display:flex;flex-direction:column;gap:8px}
+.plan-features li{font-size:13px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.plan-features li::before{content:'✓';color:var(--accent);font-weight:700;flex-shrink:0}
+.plan-btn{width:100%;padding:12px;background:var(--accent);color:#0d1f14;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity 0.2s;margin-top:16px}
+.plan-btn:hover{opacity:0.85}
+.plan:not(.featured) .plan-btn{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.plan:not(.featured) .plan-btn:hover{background:var(--accent);color:#0d1f14}
+
+/* EMAIL SUB */
+.email-sub{display:flex;gap:10px;max-width:460px;margin:0 auto 12px;flex-wrap:wrap}
+.email-sub input{flex:1;min-width:200px;background:var(--bg3);border:1px solid var(--border);border-radius:50px;padding:12px 20px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none}
+.email-sub input:focus{border-color:var(--accent)}
+.email-sub button{background:var(--accent);color:#0d1f14;border:none;border-radius:50px;padding:12px 24px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+.sub-note{font-size:12px;color:var(--text3)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:60px 20px;color:var(--text3)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.empty p{font-size:15px}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:40px 20px;text-align:center;color:var(--text3);font-size:13px;margin-top:60px}
+.footer-logo{font-family:'Fraunces',serif;font-size:20px;color:var(--accent);margin-bottom:8px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* NO RESULTS */
+.no-results{grid-column:1/-1;text-align:center;padding:60px;color:var(--text3)}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--accent);color:#0d1f14;padding:12px 24px;border-radius:50px;font-size:14px;font-weight:500;z-index:300;transition:transform 0.3s;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:600px){
+  .nav-inner{gap:10px}
+  .logo{font-size:18px}
+  .search-wrap{max-width:none}
+  .modal-stats{grid-template-columns:repeat(2,1fr)}
+  .ingredient-list{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr}
+  .email-sub{flex-direction:column}
+  .email-sub input,.email-sub button{width:100%}
+  .stats{gap:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Nutri<span>Craft</span></div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search recipes, ingredients..." autocomplete="off">
+    </div>
+    <div class="nav-actions">
+      <button class="nav-btn" id="favBtn" onclick="showFavs()">❤️ <span id="favCount">0</span></button>
+      <button class="nav-btn" onclick="scrollToSub()">✨ Subscribe</button>
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🌿 Eat Better, Feel Better</div>
+  <h1>Food that <em>fuels</em><br>your best self</h1>
+  <p>Discover high-protein, low-carb, vegan, and breakfast recipes — all crafted for taste, health, and simplicity.</p>
+  <div class="stats">
+    <div class="stat"><strong>120+</strong><span>Recipes</span></div>
+    <div class="stat"><strong>4</strong><span>Categories</span></div>
+    <div class="stat"><strong>15min</strong><span>Avg. prep</span></div>
+    <div class="stat"><strong>500+</strong><span>Members</span></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+  <div class="cats" id="catBar">
+    <button class="cat-btn active" data-cat="all"><span class="cat-icon">🍽️</span>All Recipes</button>
+    <button class="cat-btn" data-cat="high-protein"><span class="cat-icon">💪</span>High Protein</button>
+    <button class="cat-btn" data-cat="low-carb"><span class="cat-icon">🥑</span>Low Carb</button>
+    <button class="cat-btn" data-cat="vegan"><span class="cat-icon">🌱</span>Vegan</button>
+    <button class="cat-btn" data-cat="breakfast"><span class="cat-icon">🌅</span>Breakfast</button>
+    <button class="cat-btn" data-cat="favorites" id="favCatBtn"><span class="cat-icon">❤️</span>My Favorites</button>
+  </div>
+</div>
+
+<!-- RECIPES GRID -->
+<div class="section" style="padding-top:0">
+  <div class="section-header">
+    <div class="section-title" id="gridTitle">All Recipes</div>
+    <div style="font-size:13px;color:var(--text3)" id="countLabel"></div>
+  </div>
+  <div class="grid" id="recipeGrid"></div>
+</div>
+
+<!-- SUBSCRIPTION -->
+<div class="sub-section" id="subSection">
+  <div class="sub-inner">
+    <div class="hero-tag">🔥 Premium Access</div>
+    <h2>Unlock every recipe<br>& meal plan</h2>
+    <p>Get full access to 120+ recipes, personalized meal plans, shopping lists, and weekly new additions.</p>
+
+    <div class="plans">
+      <div class="plan">
+        <h3>Free</h3>
+        <div style="color:var(--text3);font-size:13px;margin-bottom:4px">Get started</div>
+        <div class="plan-price"><sup></sup>$0<span>/mo</span></div>
+        <ul class="plan-features">
+          <li>20 recipes</li>
+          <li>Search & filter</li>
+          <li>Save favorites</li>
+          <li>Basic nutrition info</li>
+        </ul>
+        <button class="plan-btn" onclick="toast('You\'re on the Free plan!')">Current Plan</button>
+      </div>
+      <div class="plan featured">
+        <div class="plan-popular">MOST POPULAR</div>
+        <h3>Pro</h3>
+        <div style="color:var(--text3);font-size:13px;margin-bottom:4px">Best for individuals</div>
+        <div class="plan-price"><sup>$</sup>9<span>/mo</span></div>
+        <ul class="plan-features">
+          <li>120+ recipes</li>
+          <li>Weekly meal plans</li>
+          <li>Shopping lists</li>
+          <li>Calorie & macro tracker</li>
+          <li>New recipes weekly</li>
+        </ul>
+        <button class="plan-btn" onclick="toast('Pro plan coming soon! 🎉')">Start Free Trial</button>
+      </div>
+      <div class="plan">
+        <h3>Family</h3>
+        <div style="color:var(--text3);font-size:13px;margin-bottom:4px">Up to 5 members</div>
+        <div class="plan-price"><sup>$</sup>19<span>/mo</span></div>
+        <ul class="plan-features">
+          <li>Everything in Pro</li>
+          <li>5 family profiles</li>
+          <li>Shared meal planner</li>
+          <li>Kids-friendly filter</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="plan-btn" onclick="toast('Family plan coming soon! 👨‍👩‍👧‍👦')">Get Started</button>
+      </div>
+    </div>
+
+    <div style="margin-top:48px">
+      <h3 style="font-family:'Fraunces',serif;font-size:20px;margin-bottom:8px;color:var(--text)">Or get free weekly recipes</h3>
+      <p style="color:var(--text2);font-size:14px;margin-bottom:20px">Join 500+ subscribers getting healthy recipes every week</p>
+      <div class="email-sub">
+        <input type="email" id="emailInput" placeholder="your@email.com">
+        <button onclick="subscribeEmail()">Subscribe Free</button>
+      </div>
+      <div class="sub-note">No spam, ever. Unsubscribe anytime.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">NutriCraft</div>
+  <p style="margin-bottom:8px">Healthy eating, made delicious.</p>
+  <p>Made with ❤️ · <a href="#">Privacy</a> · <a href="#">Contact</a></p>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <img id="modalImg" class="modal-img" src="" alt="">
+    <div class="modal-body">
+      <div class="tags" id="modalTags" style="margin-bottom:12px"></div>
+      <div class="meal-name modal-title" id="modalTitle"></div>
+      <div style="color:var(--text2);font-size:14px;margin-top:6px" id="modalDesc"></div>
+      <div class="modal-stats" id="modalStats"></div>
+      <h3>🛒 Ingredients</h3>
+      <ul class="ingredient-list" id="modalIngredients"></ul>
+      <h3>👨‍🍳 Instructions</h3>
+      <ol class="steps" id="modalSteps"></ol>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const meals = [
+  {
+    id:1, name:"Greek Chicken Bowl", cat:"high-protein",
+    img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
+    time:"25 min", cal:420, protein:48, carbs:22, fat:16,
+    tags:["High Protein","Low Carb"],
+    desc:"A vibrant Mediterranean bowl loaded with juicy grilled chicken, cucumber, tomato, olives, and creamy tzatziki over a bed of greens.",
+    ingredients:["200g chicken breast","1/2 cup Greek yogurt","1 cucumber","1 cup cherry tomatoes","1/4 cup kalamata olives","50g feta cheese","2 cups mixed greens","1 tbsp olive oil","Lemon juice","Fresh dill"],
+    steps:["Season chicken with oregano, garlic, salt and pepper. Grill 6-7 min per side.","Mix Greek yogurt with cucumber, dill, lemon juice for tzatziki.","Slice chicken and arrange over greens with tomatoes, olives, feta.","Drizzle olive oil and tzatziki. Serve immediately."]
+  },
+  {
+    id:2, name:"Avocado Protein Salad", cat:"low-carb",
+    img:"https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
+    time:"15 min", cal:350, protein:22, carbs:12, fat:26,
+    tags:["Low Carb","High Protein"],
+    desc:"Creamy avocado meets hard-boiled eggs and crispy bacon in this satisfying low-carb salad that keeps you full for hours.",
+    ingredients:["2 ripe avocados","3 hard-boiled eggs","4 strips turkey bacon","2 cups arugula","1/4 red onion","1 tbsp lemon juice","2 tbsp olive oil","Salt & pepper","Red pepper flakes"],
+    steps:["Cook bacon until crispy, roughly chop.","Halve avocados and slice into chunks.","Quarter the hard-boiled eggs.","Toss arugula with olive oil, lemon juice.","Combine all ingredients, season and serve."]
+  },
+  {
+    id:3, name:"Vegan Lentil Curry", cat:"vegan",
+    img:"https://images.unsplash.com/photo-1604152135912-04a022e23696?w=600&q=80",
+    time:"35 min", cal:380, protein:18, carbs:55, fat:10,
+    tags:["Vegan","High Protein"],
+    desc:"A warming, aromatic red lentil curry with coconut milk, fresh ginger, and a blend of spices that makes healthy eating feel indulgent.",
+    ingredients:["1.5 cups red lentils","1 can coconut milk","2 tomatoes","1 onion","3 garlic cloves","1 inch fresh ginger","2 tsp curry powder","1 tsp turmeric","1 tsp cumin","Fresh cilantro","Lime"],
+    steps:["Sauté onion in oil until golden, add garlic and ginger 2 min.","Add spices and stir 1 minute until fragrant.","Add lentils, tomatoes, coconut milk and 2 cups water.","Simmer 25 min until lentils are tender.","Finish with lime juice and fresh cilantro."]
+  },
+  {
+    id:4, name:"Overnight Protein Oats", cat:"breakfast",
+    img:"https://images.unsplash.com/photo-1495214783159-3503fd1b572d?w=600&q=80",
+    time:"5 min + overnight", cal:390, protein:28, carbs:48, fat:10,
+    tags:["Breakfast","High Protein"],
+    desc:"No-cook creamy oats layered with protein powder, almond butter, and fresh berries — ready when you wake up, no excuses needed.",
+    ingredients:["1/2 cup rolled oats","1 scoop vanilla protein","3/4 cup almond milk","2 tbsp chia seeds","1 tbsp almond butter","1/2 cup mixed berries","1 tsp honey","Pinch of cinnamon"],
+    steps:["Mix oats, protein powder, chia seeds in a jar.","Pour in almond milk and stir well.","Add almond butter and honey, stir.","Cover and refrigerate overnight (min 6 hours).","Top with fresh berries and serve cold."]
+  },
+  {
+    id:5, name:"Salmon & Asparagus", cat:"high-protein",
+    img:"https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=600&q=80",
+    time:"20 min", cal:440, protein:42, carbs:8, fat:28,
+    tags:["High Protein","Low Carb"],
+    desc:"Pan-seared salmon with tender asparagus and a bright lemon-herb butter sauce. Omega-3 rich and ready in 20 minutes.",
+    ingredients:["200g salmon fillet","1 bunch asparagus","2 tbsp butter","2 garlic cloves","1 lemon","Fresh thyme","Fresh parsley","Olive oil","Salt & pepper","Capers (optional)"],
+    steps:["Season salmon with salt, pepper and herbs.","Heat oil in pan, sear salmon skin-side up 4 min.","Flip salmon, add butter and garlic, baste 4 min.","Steam asparagus 3-4 min until tender-crisp.","Serve salmon over asparagus with lemon juice."]
+  },
+  {
+    id:6, name:"Açaí Berry Smoothie Bowl", cat:"breakfast",
+    img:"https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=600&q=80",
+    time:"10 min", cal:320, protein:14, carbs:52, fat:8,
+    tags:["Breakfast","Vegan"],
+    desc:"A thick, icy açaí base loaded with granola, banana, and colorful toppings — your morning ritual just got an upgrade.",
+    ingredients:["100g frozen açaí","1 banana","1/2 cup frozen blueberries","1/2 cup coconut milk","2 tbsp granola","1 kiwi","Sliced strawberries","Hemp seeds","Coconut flakes","Honey"],
+    steps:["Blend açaí, banana, blueberries, coconut milk until thick.","Pour into a chilled bowl.","Arrange granola, sliced kiwi, strawberries on top.","Sprinkle hemp seeds and coconut flakes.","Drizzle with honey and serve immediately."]
+  },
+  {
+    id:7, name:"Zucchini Noodles & Pesto", cat:"low-carb",
+    img:"https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&q=80",
+    time:"20 min", cal:290, protein:12, carbs:14, fat:24,
+    tags:["Low Carb","Vegan"],
+    desc:"Spiralized zucchini tossed in vibrant homemade basil pesto with cherry tomatoes and pine nuts — a low-carb pasta dream.",
+    ingredients:["3 medium zucchini","2 cups fresh basil","3 tbsp pine nuts","2 garlic cloves","3 tbsp olive oil","1/4 cup nutritional yeast","Cherry tomatoes","Lemon juice","Salt & pepper"],
+    steps:["Spiralize zucchini into noodles, lightly salt and drain 10 min.","Blend basil, pine nuts, garlic, nutritional yeast, oil, lemon.","Pat zucchini dry with paper towel.","Toss noodles with pesto and halved cherry tomatoes.","Garnish with extra pine nuts and serve."]
+  },
+  {
+    id:8, name:"Chickpea Power Bowl", cat:"vegan",
+    img:"https://images.unsplash.com/photo-1543339520-f6a69f9a3820?w=600&q=80",
+    time:"30 min", cal:460, protein:20, carbs:58, fat:18,
+    tags:["Vegan","High Protein"],
+    desc:"Crispy roasted chickpeas, roasted sweet potato, kale, and tahini dressing combine in this nutrient-dense power bowl.",
+    ingredients:["1 can chickpeas","1 sweet potato","2 cups kale","3 tbsp tahini","1 lemon","2 garlic cloves","1 tsp cumin","1 tsp paprika","Olive oil","Cherry tomatoes","Cucumber"],
+    steps:["Roast chickpeas with cumin, paprika at 200°C for 25 min.","Cube sweet potato, roast with olive oil 20-25 min.","Massage kale with olive oil and lemon juice.","Whisk tahini with lemon, garlic, water.","Assemble bowl and drizzle tahini dressing."]
+  },
+  {
+    id:9, name:"Turkey Lettuce Wraps", cat:"low-carb",
+    img:"https://images.unsplash.com/photo-1551248429-40975aa4de74?w=600&q=80",
+    time:"20 min", cal:310, protein:34, carbs:10, fat:14,
+    tags:["Low Carb","High Protein"],
+    desc:"Spiced ground turkey with water chestnuts and shiitake mushrooms wrapped in crisp iceberg lettuce — Asian-inspired and incredibly satisfying.",
+    ingredients:["300g ground turkey","1 head iceberg lettuce","1/2 cup water chestnuts","4 shiitake mushrooms","2 tbsp soy sauce","1 tsp sesame oil","2 garlic cloves","Fresh ginger","Green onions","Sriracha"],
+    steps:["Cook turkey in a pan, breaking into small pieces.","Add garlic, ginger, mushrooms, cook 3 min.","Add water chestnuts, soy sauce, sesame oil.","Cook 5 min until fragrant.","Spoon into lettuce cups, top with green onions."]
+  },
+  {
+    id:10, name:"Egg White Frittata", cat:"breakfast",
+    img:"https://images.unsplash.com/photo-1510693206972-df098062cb71?w=600&q=80",
+    time:"25 min", cal:260, protein:32, carbs:8, fat:10,
+    tags:["Breakfast","High Protein","Low Carb"],
+    desc:"A light, fluffy egg white frittata packed with spinach, roasted peppers, and goat cheese — the ultimate high-protein breakfast.",
+    ingredients:["8 egg whites","1 cup baby spinach","1/2 cup roasted peppers","3 tbsp goat cheese","1/4 onion","1 garlic clove","Fresh herbs","Olive oil","Salt & pepper"],
+    steps:["Preheat oven to 180°C.","Sauté onion and garlic in an oven-safe pan.","Add spinach until wilted.","Pour in beaten egg whites, add peppers.","Crumble goat cheese, bake 12-15 min until set."]
+  },
+  {
+    id:11, name:"Black Bean Tacos", cat:"vegan",
+    img:"https://images.unsplash.com/photo-1565299715199-866c917206bb?w=600&q=80",
+    time:"20 min", cal:380, protein:16, carbs:54, fat:12,
+    tags:["Vegan","Low Carb"],
+    desc:"Smoky chipotle black bean tacos with pickled red cabbage, mango salsa, and a drizzle of avocado crema. Weeknight magic.",
+    ingredients:["2 cans black beans","8 corn tortillas","1/2 red cabbage","1 mango","1 avocado","1 lime","1 tsp chipotle powder","Fresh cilantro","Red onion","Apple cider vinegar"],
+    steps:["Quick-pickle cabbage in vinegar, lime, salt 10 min.","Season beans with chipotle, cumin, garlic, heat through.","Dice mango, red onion, cilantro for salsa.","Blend avocado with lime juice and water for crema.","Warm tortillas, assemble with all toppings."]
+  },
+  {
+    id:12, name:"Tuna Stuffed Avocados", cat:"high-protein",
+    img:"https://images.unsplash.com/photo-1490474418585-ba9bad8fd0ea?w=600&q=80",
+    time:"10 min", cal:340, protein:28, carbs:6, fat:24,
+    tags:["High Protein","Low Carb"],
+    desc:"Creamy tuna salad with Dijon, celery, and capers spooned into ripe avocado halves — a 10-minute no-cook protein powerhouse.",
+    ingredients:["2 cans tuna in water","2 ripe avocados","2 tbsp Greek yogurt","1 tsp Dijon mustard","2 celery stalks","1 tbsp capers","1/4 red onion","Fresh dill","Lemon juice","Black pepper"],
+    steps:["Drain tuna, flake into a bowl.","Mix with Greek yogurt, Dijon, lemon juice.","Fold in diced celery, onion, capers, dill.","Halve avocados and remove pit.","Spoon tuna mixture generously into avocados."]
+  }
+];
+
+let favorites = JSON.parse(localStorage.getItem('nutricraft-favs') || '[]');
+let currentCat = 'all';
+let searchQuery = '';
+
+function updateFavCount(){
+  document.getElementById('favCount').textContent = favorites.length;
+}
+
+function renderGrid(list){
+  const grid = document.getElementById('recipeGrid');
+  document.getElementById('countLabel').textContent = list.length + ' recipes';
+  if(list.length === 0){
+    if(currentCat === 'favorites'){
+      grid.innerHTML = '<div class="no-results"><div class="empty-icon">❤️</div><p>No favorites yet.<br>Tap the ♡ on any recipe to save it here.</p></div>';
+    } else {
+      grid.innerHTML = '<div class="no-results"><div class="empty-icon">🔍</div><p>No recipes found for "<strong>' + searchQuery + '</strong>"</p></div>';
+    }
+    return;
+  }
+  grid.innerHTML = list.map(m => {
+    const isFav = favorites.includes(m.id);
+    const catLabels = {
+      'high-protein':'💪 High Protein',
+      'low-carb':'🥑 Low Carb',
+      'vegan':'🌱 Vegan',
+      'breakfast':'🌅 Breakfast'
+    };
+    const tagColors = {
+      'High Protein':'tag-p','Low Carb':'tag-c','Vegan':'tag-v','Breakfast':'tag-b'
+    };
+    return `
+    <div class="card" onclick="openModal(${m.id})">
+      <div class="card-img-wrap">
+        <img src="${m.img}" alt="${m.name}" loading="lazy">
+        <div class="cat-badge">${catLabels[m.cat]||m.cat}</div>
+        <button class="fav-btn ${isFav?'faved':''}" onclick="toggleFav(event,${m.id})">${isFav?'❤️':'🤍'}</button>
+      </div>
+      <div class="card-body">
+        <div class="meal-name">${m.name}</div>
+        <div class="meal-meta">
+          <div class="meta-item">⏱ ${m.time}</div>
+          <div class="meta-item">🔥 ${m.cal} kcal</div>
+          <div class="meta-item">💪 ${m.protein}g protein</div>
+        </div>
+        <div class="tags">
+          ${m.tags.map(t=>`<span class="tag ${tagColors[t]||'tag-p'}">${t}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function getFiltered(){
+  let list = meals;
+  if(currentCat === 'favorites'){
+    list = list.filter(m => favorites.includes(m.id));
+  } else if(currentCat !== 'all'){
+    list = list.filter(m => m.cat === currentCat);
+  }
+  if(searchQuery){
+    const q = searchQuery.toLowerCase();
+    list = list.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      m.tags.some(t=>t.toLowerCase().includes(q)) ||
+      m.cat.includes(q) ||
+      m.ingredients.some(i=>i.toLowerCase().includes(q))
+    );
+  }
+  return list;
+}
+
+function updateGrid(){
+  renderGrid(getFiltered());
+}
+
+// Category buttons
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentCat = btn.dataset.cat;
+    const titles = {all:'All Recipes','high-protein':'💪 High Protein','low-carb':'🥑 Low Carb','vegan':'🌱 Vegan','breakfast':'🌅 Breakfast','favorites':'❤️ My Favorites'};
+    document.getElementById('gridTitle').textContent = titles[currentCat] || 'Recipes';
+    updateGrid();
+  });
+});
+
+// Search
+document.getElementById('searchInput').addEventListener('input', e => {
+  searchQuery = e.target.value;
+  updateGrid();
+});
+
+function toggleFav(e, id){
+  e.stopPropagation();
+  if(favorites.includes(id)){
+    favorites = favorites.filter(f=>f!==id);
+    toast('Removed from favorites');
+  } else {
+    favorites.push(id);
+    toast('Added to favorites ❤️');
+  }
+  localStorage.setItem('nutricraft-favs', JSON.stringify(favorites));
+  updateFavCount();
+  updateGrid();
+}
+
+function showFavs(){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('[data-cat="favorites"]').classList.add('active');
+  currentCat = 'favorites';
+  document.getElementById('gridTitle').textContent = '❤️ My Favorites';
+  updateGrid();
+  document.querySelector('.section').scrollIntoView({behavior:'smooth'});
+}
+
+function openModal(id){
+  const m = meals.find(x=>x.id===id);
+  if(!m) return;
+  document.getElementById('modalImg').src = m.img;
+  document.getElementById('modalImg').alt = m.name;
+  document.getElementById('modalTitle').textContent = m.name;
+  document.getElementById('modalDesc').textContent = m.desc;
+  const tagColors = {'High Protein':'tag-p','Low Carb':'tag-c','Vegan':'tag-v','Breakfast':'tag-b'};
+  document.getElementById('modalTags').innerHTML = m.tags.map(t=>`<span class="tag ${tagColors[t]||'tag-p'}">${t}</span>`).join('');
+  document.getElementById('modalStats').innerHTML = `
+    <div class="mstat"><strong>${m.cal}</strong><span>Calories</span></div>
+    <div class="mstat"><strong>${m.protein}g</strong><span>Protein</span></div>
+    <div class="mstat"><strong>${m.carbs}g</strong><span>Carbs</span></div>
+    <div class="mstat"><strong>${m.fat}g</strong><span>Fat</span></div>
+  `;
+  document.getElementById('modalIngredients').innerHTML = m.ingredients.map(i=>`<li>${i}</li>`).join('');
+  document.getElementById('modalSteps').innerHTML = m.steps.map((s,i)=>`<li><span class="step-num">${i+1}</span>${s}</li>`).join('');
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e){
+  if(e.target === document.getElementById('modalOverlay')) closeModalBtn();
+}
+function closeModalBtn(){
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape') closeModalBtn();
+});
+
+function toggleTheme(){
+  const html = document.documentElement;
+  const isDark = html.dataset.theme === 'dark';
+  html.dataset.theme = isDark ? 'light' : 'dark';
+  document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+}
+
+function scrollToSub(){
+  document.getElementById('subSection').scrollIntoView({behavior:'smooth'});
+}
+
+function subscribeEmail(){
+  const email = document.getElementById('emailInput').value;
+  if(!email || !email.includes('@')){
+    toast('Please enter a valid email 📧');
+    return;
+  }
+  document.getElementById('emailInput').value = '';
+  toast('You\'re subscribed! Check your inbox 🎉');
+}
+
+let toastTimer;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 2800);
+}
+
+updateFavCount();
+updateGrid();
+</script>
+</body>
+</html>
